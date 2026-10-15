@@ -1,5 +1,5 @@
 """Minimal Android binary XML (AXML) writer for AndroidManifest.xml (no aapt needed). Взято из проекта Tuner."""
-import struct, sys
+import struct, sys, os
 
 ANDROID_NS = "http://schemas.android.com/apk/res/android"
 RES_IDS = {
@@ -17,7 +17,7 @@ def A(name, value):
     return (True, name, value)
 
 def manifest(pkg, label, activity):
-    return ("manifest", [(False, "package", pkg), A("versionCode", 1), A("versionName", "1.0")], [
+    return ("manifest", [(False, "package", pkg), A("versionCode", int(os.environ.get("VERSION_CODE", "1"))), A("versionName", os.environ.get("VERSION_NAME", "1.0"))], [
         ("uses-sdk", [A("minSdkVersion", 21), A("targetSdkVersion", 29)], []),
         ("uses-permission", [A("name", "android.permission.INTERNET")], []),
         ("application", [A("label", label), A("icon", ("ref", 0x7f020000))], [

@@ -9,6 +9,10 @@
 
 ## Сборка
 
+Каждый пуш в `main` собирает APK на GitHub Actions (`.github/workflows/build.yml`) и выпускает релиз `v1.0.N` с файлом `app-release.apk`; N — номер запуска, он же versionCode, поэтому новая версия ставится поверх старой.
+
+Локально:
+
 Android SDK не нужен, хватит JDK, Python 3 и curl/git (как в проекте Tuner):
 
 ```

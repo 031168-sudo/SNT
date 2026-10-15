@@ -1,0 +1,33 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Build APK
+        env:
+          VERSION_CODE: ${{ github.run_number }}
+          VERSION_NAME: 1.0.${{ github.run_number }}
+        run: ./build.sh
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG=v1.0.${{ github.run_number }}
+          cp build/MoeSNT.apk app-release.apk
+          gh release create "$TAG" app-release.apk \
+            --title "Моё СНТ $TAG" \
+            --notes "Сборка ${{ github.run_number }} из коммита ${GITHUB_SHA::7}: ${{ github.event.head_commit.message }}"
